@@ -1,0 +1,11 @@
+.form {
+  background-color: white !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.heading {
+  color: red;
+}
