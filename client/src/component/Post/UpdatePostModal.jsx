@@ -41,7 +41,7 @@ const UpdatePostModal = ({
   };
 
   return (
-    <Modal show={show} animation={false} onHide={closeUpdatePostModal}>
+    <Modal show={show}  onHide={closeUpdatePostModal}>
       <Modal.Header closeButton>
         <Modal.Title>Making progress?</Modal.Title>
       </Modal.Header>

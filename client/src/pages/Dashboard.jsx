@@ -59,9 +59,8 @@ const Dashboard = (props) => {
       />
       {/* After post is added, show toast */}
       <Toast
-        animation={false}
         show={show}
-        style={{ position: 'fixed', top: '20%', right: '10px' }}
+        style={{ position: 'fixed', top: '20%', right: '10px', zIndex: '1060' }}
         className={`bg-${type} text-white`}
         onClose={setToast.bind(null, { show: false, type: null, message: '' })}
         autohide

@@ -1,5 +1,5 @@
 import { createContext, useReducer, useEffect } from 'react';
-import axios from 'axios';
+import { apiAxios } from '../api/axios';
 import { authReducer } from '../reducers/authReducer';
 
 const AuthContext = createContext();
@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
   //Authenticate user
   const loadUser = async () => {
     try {
-      const res = await axios('/api/auth');
+      const res = await apiAxios('/api/auth');
       if (res.data.success) {
         dispatch({
           type: 'SET_AUTH',
@@ -39,55 +39,54 @@ export const AuthProvider = ({ children }) => {
 
   const loginHandler = async (user) => {
     try {
-      const res = await axios('/api/auth/login', {
+      const res = await apiAxios('/api/auth/login', {
         method: 'POST',
         data: {
           username: user.username,
           password: user.password,
         },
       });
-      if (res.data.success) {
-        dispatch({
-          type: 'SET_AUTH',
-          payload: { isAuthenticated: true, user: res.data.data.user },
-        });
-      }
+      dispatch({
+        type: 'SET_AUTH',
+        payload: { isAuthenticated: true, user: res.data.data.user },
+      });
       return res.data;
     } catch (error) {
       dispatch({
         type: 'SET_AUTH',
         payload: { isAuthenticated: false, user: null },
       });
-      return error.response.data;
+      return (
+        error?.response?.data ?? { success: false, message: error.message }
+      );
     }
   };
 
   const registerHandler = async (user) => {
     try {
-      const res = await axios('/api/auth/register', {
+      const res = await apiAxios('/api/auth/register', {
         method: 'POST',
         data: user,
       });
-      if (res.data.success) {
-        dispatch({
-          type: 'SET_AUTH',
-          payload: { isAuthenticated: true, user: res.data.data.user },
-        });
-      }
+      dispatch({
+        type: 'SET_AUTH',
+        payload: { isAuthenticated: true, user: res.data.data.user },
+      });
       return res.data;
     } catch (error) {
-      console.log(error.response);
       dispatch({
         type: 'SET_AUTH',
         payload: { isAuthenticated: false, user: null },
       });
-      return error.response.data;
+      return (
+        error?.response?.data ?? { success: false, message: error.message }
+      );
     }
   };
 
   const logoutHandler = async () => {
     try {
-      const res = await axios('/api/auth/logout');
+      const res = await apiAxios('/api/auth/logout');
       if (res.data.success) {
         dispatch({
           type: 'SET_AUTH',

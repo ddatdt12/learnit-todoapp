@@ -35,7 +35,7 @@ const AddPostModal = ({
       type: success ? 'success' : 'danger',
       message,
     });
-    resetAddPostModal();
+    if (success) resetAddPostModal();
   };
 
   const resetAddPostModal = () => {
@@ -44,7 +44,7 @@ const AddPostModal = ({
   };
 
   return (
-    <Modal show={isShownModal} animation={false} onHide={resetAddPostModal}>
+    <Modal show={isShownModal} onHide={resetAddPostModal}>
       <Modal.Header closeButton>
         <Modal.Title>What do you want to learn?</Modal.Title>
       </Modal.Header>

@@ -14,9 +14,11 @@ const ActionButtons = ({ post }) => {
 
   return (
     <>
-      <Button className='post-button' href={url} target='_blank'>
-        <img src={playIcon} alt='play' width='32' height='32' />
-      </Button>
+      {url && (
+        <Button className='post-button' href={url} target='_blank'>
+          <img src={playIcon} alt='play' width='32' height='32' />
+        </Button>
+      )}
       <Button className='post-button text-center'>
         <img
           src={editIcon}

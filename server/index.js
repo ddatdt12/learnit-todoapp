@@ -8,7 +8,12 @@ const postRoute = require('./routes/post');
 const errorHandler = require('./middlewares/errorHandler');
 const AppError = require('./utils/AppError');
 
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  }),
+);
 
 app.use(express.json());
 

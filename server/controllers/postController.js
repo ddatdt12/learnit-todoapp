@@ -3,7 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 const Post = require('../models/Post');
 const isValidUrl = (url) => {
   return url.match(
-    /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g,
+    /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/,
   );
 };
 
@@ -24,10 +24,15 @@ exports.getPosts = catchAsync(async (req, res, next) => {
 //@access       PRIVATE
 exports.createPost = catchAsync(async (req, res, next) => {
   const { title, description, url, status } = req.body;
+
+  if (url.trim() !== '' && !isValidUrl(url)) {
+    return next(new AppError('Url is invalid', 400));
+  }
+
   const newPost = await Post.create({
     title,
     description,
-    url: url.startsWith('https://') ? url : `https://${url}`,
+    url: url.trim(),
     status,
     user: req.user._id,
   });
@@ -43,7 +48,10 @@ exports.createPost = catchAsync(async (req, res, next) => {
 //@access       PRIVATE
 exports.updatePost = catchAsync(async (req, res, next) => {
   const { url } = req.body;
-  req.body.url = url && url.startsWith('https://') ? url : `https://${url}`;
+
+  if (url?.trim() && !isValidUrl(url)) {
+    return next(new AppError('Url is invalid', 400));
+  }
 
   const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
     new: true,

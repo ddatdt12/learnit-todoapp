@@ -1,4 +1,5 @@
-import axios from 'axios';
+import { apiAxios } from '../api/axios';
+
 import { createContext, useCallback, useReducer, useState } from 'react';
 import postReducer from '../reducers/postReducer';
 
@@ -21,14 +22,12 @@ export const PostContextProvider = ({ children }) => {
   const getPosts = useCallback(async () => {
     dispatch({ type: 'SENDING' });
     try {
-      const res = await axios('/api/posts');
-      if (res.data.success) {
-        dispatch({ type: 'LOAD_POSTS_SUCCESS', payload: res.data.data });
-      }
+      const res = await apiAxios('/api/posts');
+      dispatch({ type: 'LOAD_POSTS_SUCCESS', payload: res.data.data });
     } catch (error) {
       dispatch({
         type: 'ERROR',
-        payload: error.response.data || {
+        payload: error?.response?.data ?? {
           success: false,
           message: 'Server error!',
         },
@@ -38,7 +37,10 @@ export const PostContextProvider = ({ children }) => {
   const addNewPost = async (newPost) => {
     dispatch({ type: 'SENDING' });
     try {
-      const res = await axios('/api/posts', { method: 'POST', data: newPost });
+      const res = await apiAxios('/api/posts', {
+        method: 'POST',
+        data: newPost,
+      });
       if (res.data.success) {
         dispatch({ type: 'ADD_NEW_POST', payload: res.data.data });
       }
@@ -46,16 +48,16 @@ export const PostContextProvider = ({ children }) => {
     } catch (error) {
       dispatch({ type: 'DONE' });
       return (
-        error.response.data || {
+        error?.response?.data ?? {
           success: false,
-          message: 'Server error!',
+          message: 'Server Error! Try again',
         }
       );
     }
   };
   const deletePost = async (postId) => {
     try {
-      const res = await axios(`/api/posts/${postId}`, { method: 'DELETE' });
+      const res = await apiAxios(`/api/posts/${postId}`, { method: 'DELETE' });
       if (res.data.success) {
         dispatch({ type: 'DELETE_POST', payload: postId });
       }
@@ -66,7 +68,7 @@ export const PostContextProvider = ({ children }) => {
   const updatePost = async (postId, updatedPost) => {
     // dispatch({ type: 'SENDING' });
     try {
-      const res = await axios(`/api/posts/${postId}`, {
+      const res = await apiAxios(`/api/posts/${postId}`, {
         method: 'PUT',
         data: updatedPost,
       });
@@ -79,12 +81,12 @@ export const PostContextProvider = ({ children }) => {
       return { success: true, message: 'Update successfully!' };
     } catch (error) {
       dispatch({ type: 'DONE' });
-      return error.response
-        ? error.response.data
-        : {
-            success: false,
-            message: 'Server error!',
-          };
+      return (
+        error?.response?.data ?? {
+          success: false,
+          message: 'Server Error! Try again',
+        }
+      );
     }
   };
 
