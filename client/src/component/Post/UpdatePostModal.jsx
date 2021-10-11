@@ -30,18 +30,17 @@ const UpdatePostModal = ({
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(updatedPost);
     const { success, message } = await updatePost(chosenPost._id, updatedPost);
     setToast({
       show: true,
       type: success ? 'success' : 'danger',
       message: message,
     });
-    closeUpdatePostModal();
+    if (success) closeUpdatePostModal();
   };
 
   return (
-    <Modal show={show}  onHide={closeUpdatePostModal}>
+    <Modal show={show} onHide={closeUpdatePostModal}>
       <Modal.Header closeButton>
         <Modal.Title>Making progress?</Modal.Title>
       </Modal.Header>

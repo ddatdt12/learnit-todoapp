@@ -62,22 +62,23 @@ export const PostContextProvider = ({ children }) => {
         dispatch({ type: 'DELETE_POST', payload: postId });
       }
     } catch (error) {
-      console.log(error.response);
+      console.log(
+        error?.response?.data ?? { success: false, message: error.message },
+      );
     }
   };
   const updatePost = async (postId, updatedPost) => {
-    // dispatch({ type: 'SENDING' });
+    dispatch({ type: 'SENDING' });
     try {
-      const res = await apiAxios(`/api/posts/${postId}`, {
+      const { data } = await apiAxios(`/api/posts/${postId}`, {
         method: 'PUT',
         data: updatedPost,
       });
-      if (res.data.success) {
-        dispatch({
-          type: 'UPDATE_POST',
-          payload: { _id: postId, ...updatedPost },
-        });
-      }
+
+      dispatch({
+        type: 'UPDATE_POST',
+        payload: data.post,
+      });
       return { success: true, message: 'Update successfully!' };
     } catch (error) {
       dispatch({ type: 'DONE' });

@@ -32,7 +32,7 @@ exports.createPost = catchAsync(async (req, res, next) => {
   const newPost = await Post.create({
     title,
     description,
-    url: url.trim(),
+    url: url.trim() && !url.startsWith('https') && `https://${url.trim()}`,
     status,
     user: req.user._id,
   });
@@ -53,6 +53,9 @@ exports.updatePost = catchAsync(async (req, res, next) => {
     return next(new AppError('Url is invalid', 400));
   }
 
+  if (url.trim() && !url.startsWith('https'))
+    req.body.url = `https://${url.trim()}`;
+
   const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -70,7 +73,7 @@ exports.updatePost = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: updatedPost,
+    post: updatedPost,
   });
 });
 

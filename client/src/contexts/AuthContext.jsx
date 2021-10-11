@@ -19,7 +19,6 @@ export const AuthProvider = ({ children }) => {
         });
       }
     } catch (error) {
-      console.log(error);
       dispatch({
         type: 'SET_AUTH',
         payload: { isAuthenticated: false, user: null },
@@ -94,7 +93,9 @@ export const AuthProvider = ({ children }) => {
         });
       }
     } catch (error) {
-      console.log(error.response);
+      console.log(
+        error?.response?.data ?? { success: false, message: error.message },
+      );
     }
   };
   const authContextData = {

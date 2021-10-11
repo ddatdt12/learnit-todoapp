@@ -1,0 +1,4 @@
+dùng lệnh
+    git subtree push --prefix server heroku main
+để push server lên heroku vì cần phải push folder có file index.js
+để chạy lệnh node index.js trên server
