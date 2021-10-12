@@ -11,7 +11,11 @@ MongoDB, Expressjs, React, Nodejs
 
 MERN stack is the idea of using Javascript/Node for fullstack web development.
 
-> Front-end Learnit application
+
+# Demo
+[LearnitTodo](https://learnit-todo.netlify.app/login)
+
+## Front-end Learnit application
 ## Usage
 
 ### Install Dependencies
@@ -25,28 +29,26 @@ npm install
 npm start
 
 
-> Backend API for DevCamper application, which is a bootcamp directory website
+## Backend API
 
 ## Usage
 
-Rename "config/config.env.env" to "config/config.env" and update the values/settings to your own
+Rename "server/example.env" to "server/.env" and update the values/settings to your own
 
-## Install Dependencies
+### Install Dependencies
 
 ```
 npm install
 ```
 
-## Run App
+### Run App
 
 ```
 # Run in dev mode
-npm run dev
+npm run server
 
 # Run in prod mode
 npm start
 ```
 
-# Demo
-[LearnitTodo](https://learnit-todo.netlify.app/login)
 
