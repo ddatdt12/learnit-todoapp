@@ -12,12 +12,10 @@ export const AuthProvider = ({ children }) => {
   const loadUser = async () => {
     try {
       const res = await apiAxios('/api/auth');
-      if (res.data.success) {
-        dispatch({
-          type: 'SET_AUTH',
-          payload: { isAuthenticated: true, user: res.data.data.user },
-        });
-      }
+      dispatch({
+        type: 'SET_AUTH',
+        payload: { isAuthenticated: true, user: res.data.data.user },
+      });
     } catch (error) {
       dispatch({
         type: 'SET_AUTH',
@@ -37,6 +35,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const loginHandler = async (user) => {
+    dispatch({
+      type: 'AUTH_LOADING',
+    });
     try {
       const res = await apiAxios('/api/auth/login', {
         method: 'POST',

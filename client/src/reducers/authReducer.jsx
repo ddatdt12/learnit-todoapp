@@ -3,6 +3,10 @@ export const authReducer = (state, action) => {
 
   let updatedState = {};
   switch (type) {
+    case 'AUTH_LOADING': {
+      updatedState = { ...state, isLoading: true };
+      break;
+    }
     case 'SET_AUTH': {
       updatedState = { ...state, ...payload, isLoading: false };
       break;
