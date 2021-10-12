@@ -85,13 +85,11 @@ export const AuthProvider = ({ children }) => {
 
   const logoutHandler = async () => {
     try {
-      const res = await apiAxios('/api/auth/logout');
-      if (res.data.success) {
-        dispatch({
-          type: 'SET_AUTH',
-          payload: { isAuthenticated: false, user: null },
-        });
-      }
+      await apiAxios('/api/auth/logout');
+      dispatch({
+        type: 'SET_AUTH',
+        payload: { isAuthenticated: false, user: null },
+      });
     } catch (error) {
       console.log(
         error?.response?.data ?? { success: false, message: error.message },

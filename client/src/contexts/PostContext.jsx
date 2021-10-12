@@ -41,9 +41,7 @@ export const PostContextProvider = ({ children }) => {
         method: 'POST',
         data: newPost,
       });
-      if (res.data.success) {
-        dispatch({ type: 'ADD_NEW_POST', payload: res.data.data });
-      }
+      dispatch({ type: 'ADD_NEW_POST', payload: res.data.data });
       return { success: true, message: 'You just add a post. Happy learning!' };
     } catch (error) {
       dispatch({ type: 'DONE' });

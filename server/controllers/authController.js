@@ -88,11 +88,17 @@ exports.authenticate = (req, res) => {
 //@route        GET /api/auth/logout
 //@access       PRIVATE
 exports.logout = (req, res) => {
-  res.cookie('jwt', 'over', {
-    expires: new Date(Date.now() + 10 * 1000),
+  // Default for localhost
+  let cookieOptions = {
+    expires: new Date(Date.now() + 1 * 1000),
     httpOnly: true,
     secure: false,
-    // secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
-  });
-  res.status(200).json({ success: true, data: {} });
+  };
+  if (process.env.NODE_ENV === 'production') {
+    cookieOptions.sameSite = 'none';
+    cookieOptions.secure = true;
+  }
+  res.cookie('jwt', 'over', cookieOptions);
+
+  res.status(204).json({ success: true, data: {} });
 };
